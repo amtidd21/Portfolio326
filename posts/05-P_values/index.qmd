@@ -1,0 +1,32 @@
+---
+title: "Mini Project 5: Advantages and Drawbacks of Using p-values"
+author: "Alex Tidd"
+---
+
+Question 1:
+
+To me, I understand this quote to mean that the further away we get from blindly saying “p \< 0.05 Reject the null” the more we start thinking deeper into what we are studying and stating. I think a big example of this is in time-based sports. A sport like cycling, 1 second can mean the difference between first and 10th. However, a certain piece of equipment, or a new body position can cut seconds down but, may not cut time down drastically enough for a p \< 0.05. Thinking statistically would be realizing that even the p-value isn’t low this change is actually relevant in its context, and looking into other statistics in the sport can allow us to gain a better understanding of its context. It’s looking at the big picture instead of homing in on one small detail.
+
+Question 2:
+
+Essentially, what the authors are trying to say is that adding the term “statistically significant” confuses the true meaning of what the statistics are saying. As the authors note, “statistically significant” was originally coined to indicate which results to investigate further. However, the general public, both statistically inclined and not, take this to mean the result is significant and to take it at face value. It also adds confusion when paired with “p \< 0.05” as now both terms are intertwined, so someone will see “p \< 0.05” and instantly go to “statistically significant” and vice versa. The phrase has lost its true meaning.
+
+Question 3:
+
+I wholly agree with this statement. In my time in other fields such as chemistry, I have heard time and time again that “No ‘significant’ data is still data”. An example of this: A student wants to see if a certain catalyst has a “significant” impact on reaction rate, it does not. The student should not throw his research out or hide this result from his write up, but, put it in there as a) their threshold is arbitrary, and b) there is still a lot of information one can extrapolate from a result not passing a certain “threshold”. Data published should be based on if the data is relevant to the research and if information can be learnt from the data and used by future researchers to aid in their research, like; maybe this one catalyst doesn’t have much effect on rate.
+
+Question 4:
+
+I do agree with this statement, even though it did take me a bit to make up my mind on it. In the future we may see a new accepted standard, but the field of statistics is ever evolving so new ideas will keep being accepted and tweaks to new models will always be made. Furthermore, what is “important” to one statistician may not be “important” to another. Frankly, I am a big fan of the “Second Generation P-Value” (SGPV) by Blume et al. since the test is very easy to understand and that conclusion statements written with this test can have little confusion to the general public. The 0 to 1 approach with 0.5 being completely inconclusive is very straight forward, something I hold very important.
+
+Question 5:
+
+In general, I think “statistical thoughtfulness” is looking at the grand scheme of your work before starting and definitely before concluding things. As I touched on in question 1, knowing the context about the topic you are studying and how some value that aren’t p \< 0.05 are actually pretty significant. It also plays a role in deciding on what you use as estimators, as the authors say. A really good example of this is my SYE where I had an optimized set of parameters that greatly lowered a mean residual value. However, these parameters allowed for negative rankings and win probabilities around 6 x 10-6 which isn’t really realistic at all, even though it may be, as some may claim, “significant”. Always research before going in and don’t go looking for specific data as it may be misleading.
+
+Question 6:
+
+I believe that these authors believe the big problem stems around the confusion around the term “significant” and “confident”. It is much more straightforward to use percentages to describe how much the data aligns with the hypothesis, which is honestly way more straightforward and actually feels more descriptive in what the data is showing. Frankly, I don’t think slapping a new name on it will help. I think the best way to solve this issue is by simply describing the data differently as shown in the reading: “Goodman says investigators might add a statement such as “There is an 80% chance that this drug raises the risk, and a 60% chance that the risk is at least doubled.” (Wasserstein, 5).
+
+Question 7:
+
+“If it were easy, it would have already been done, because as we have noted, this is nowhere near the first time the alarm has been sounded.” Start of section 5 on page 8. I personally love this quote as it shows just how deep p-values have been ingrained in all fields. And how it has almost become industry standard in many fields. It sort of proves my point that I have stood by since freshman year that a lot of researchers in other fields (predominantly biologists), don’t have a deep understanding of what their testing in a statistical test, as they are huge p \< 0.05 people. It shows that entire fields need to be better educated in statistical modeling and have to be on board with changing their scientific methods and looking back at old research and rethinking conclusions written based off of p \< 0.05, which would take a lot of work.

@@ -1,0 +1,456 @@
+---
+title: "Mini Project 1: Simulation"
+author: "Alex Tidd"
+---
+
+I have followed all rules for collaboration for this project, and I have not used generative AI on this project -Alex Tidd
+
+```{r, message=FALSE, warning=FALSE}
+library(mosaic)
+library(tidyverse)
+library(ggplot2)
+```
+
+Plots of the four distributions being tested:
+
+```{r}
+## Code from Dr. Higham
+## create population graphs
+
+norm_df <- tibble(x = seq(3, 17, length.out = 1000),
+                  dens = dnorm(x, mean = 10, sd = 2),
+                  pop = "normal(10, 4)")
+unif_df <- tibble(x = seq(7, 13, length.out = 1000),
+                  dens = dunif(x, 7, 13),
+                  pop = "uniform(7, 13)")
+exp_df <- tibble(x = seq(0, 10, length.out = 1000),
+                 dens = dexp(x, 0.5),
+                 pop = "exp(0.5)")
+beta_df <- tibble(x = seq(0, 1, length.out = 1000),
+                  dens = dbeta(x, 8, 2),
+                  pop = "beta(8, 2)")
+
+pop_plot <- bind_rows(norm_df, unif_df, exp_df, beta_df) |>
+  mutate(pop = fct_relevel(pop, c("normal(10, 4)", "uniform(7, 13)",
+                                  "exp(0.5)", "beta(8, 2)")))
+
+ggplot(data = pop_plot, aes(x = x, y = dens)) +
+  geom_line() +
+  theme_minimal() +
+  facet_wrap(~ pop, nrow = 1, scales = "free") +
+  labs(title = "Population Distributions for Each Simulation Setting")
+```
+
+Histogram for Y_min for N(10, 4)
+
+```{r}
+## Code from class
+
+n <- 5            # sample size
+mu <- 10          # population mean
+sigma <- 2        # population standard deviation
+
+generate_samp_Nmin <- function(mu, sigma, n) {
+  
+  single_sample_Nmin <- rnorm(n, mu, sigma)
+  sample_Nmin <- min(single_sample_Nmin)
+  
+  return(sample_Nmin)
+}
+
+## test function once:
+generate_samp_Nmin(mu = mu, sigma = sigma, n = n)
+
+nsim <- 5000      # number of simulations
+
+## code to map through the function. 
+## the \(i) syntax says to just repeat the generate_samp_mean function
+## nsim times
+Nmins <- map_dbl(1:nsim, \(i) generate_samp_Nmin(mu = mu, sigma = sigma, n = n))
+
+## print some of the 5000 means
+## each number represents the sample mean from __one__ sample.
+Nmins_df <- tibble(Nmins)
+Nmins_df
+
+ggplot(data = Nmins_df, aes(x = Nmins)) +
+  geom_histogram(colour = "deeppink4", fill = "deeppink1", bins = 20) +
+  theme_minimal() +
+  labs(x = "Observed Sample Mins",
+       title = paste("Normal Sampling Distribution of the \nSample Min when n =", n))
+
+Nmins_df |>
+  summarise(mean_samp_dist_Nmin = mean(Nmins),
+            var_samp_dist_Nmin = var(Nmins),
+            sd_samp_dist_Nmin = sd(Nmins))
+```
+
+Histogram for Y_max for N(10, 4)
+
+```{r}
+## Code from class
+
+n <- 5            # sample size
+mu <- 10          # population mean
+sigma <- 2        # population standard deviation
+
+generate_samp_Nmax <- function(mu, sigma, n) {
+  
+  single_sample_Nmax <- rnorm(n, mu, sigma)
+  sample_Nmax <- max(single_sample_Nmax)
+  
+  return(sample_Nmax)
+}
+
+## test function once:
+generate_samp_Nmax(mu = mu, sigma = sigma, n = n)
+
+nsim <- 5000      # number of simulations
+
+## code to map through the function. 
+## the \(i) syntax says to just repeat the generate_samp_mean function
+## nsim times
+Nmaxs <- map_dbl(1:nsim, \(i) generate_samp_Nmax(mu = mu, sigma = sigma, n = n))
+
+## print some of the 5000 means
+## each number represents the sample mean from __one__ sample.
+Nmaxs_df <- tibble(Nmaxs)
+Nmaxs_df
+
+ggplot(data = Nmaxs_df, aes(x = Nmaxs)) +
+  geom_histogram(colour = "deeppink4", fill = "deeppink1", bins = 20) +
+  theme_minimal() +
+  labs(x = "Observed Sample Maxes",
+       title = paste("Normal Sampling Distribution of the \nSample Max when n =", n))
+
+Nmaxs_df |>
+  summarise(mean_samp_dist_Nmax = mean(Nmaxs),
+            var_samp_dist_Nmax = var(Nmaxs),
+            sd_samp_dist_Nmax = sd(Nmaxs))
+```
+
+Histogram for Y_min for Unif(7, 13)
+
+```{r}
+## Code from class
+
+theta1 <- 7
+theta2 <- 13
+n <- 5
+
+generate_samp_Umin <- function(n, theta1, theta2) {
+  
+  single_sample_Umin <- runif(n, theta1, theta2)
+  sample_Umin <- min(single_sample_Umin)
+  
+  return(sample_Umin)
+}
+
+## test function once:
+generate_samp_Umin(n = n, theta1 = theta1, theta2 = theta2)
+
+nsim <- 5000      # number of simulations
+
+## code to map through the function. 
+## the \(i) syntax says to just repeat the generate_samp_mean function
+## nsim times
+Umins <- map_dbl(1:nsim, \(i) generate_samp_Umin(n = n, theta1 = theta1, theta2 = theta2))
+
+## print some of the 5000 means
+## each number represents the sample mean from __one__ sample.
+Umins_df <- tibble(Umins)
+Umins_df
+
+ggplot(data = Umins_df, aes(x = Umins)) +
+  geom_histogram(colour = "deeppink4", fill = "deeppink1", bins = 20) +
+  theme_minimal() +
+  labs(x = "Observed Sample Mins",
+       title = paste("Uniform Sampling Distribution of the \nSample Min when n =", n))
+
+Nmins_df |>
+  summarise(mean_samp_dist_Umin = mean(Umins),
+            var_samp_dist_Umin = var(Umins),
+            sd_samp_dist_Umin = sd(Umins))
+```
+
+Histogram for Y_max for Unif(7, 13)
+
+```{r}
+## Code from class
+
+theta1 <- 7
+theta2 <- 13
+n <- 5
+
+generate_samp_Umax <- function(n, theta1, theta2) {
+  
+  single_sample_Umax <- runif(n, theta1, theta2)
+  sample_Umax <- max(single_sample_Umax)
+  
+  return(sample_Umax)
+}
+
+## test function once:
+generate_samp_Umax(n = n, theta1 = theta1, theta2 = theta2)
+
+nsim <- 5000      # number of simulations
+
+## code to map through the function. 
+## the \(i) syntax says to just repeat the generate_samp_mean function
+## nsim times
+Umaxs <- map_dbl(1:nsim, \(i) generate_samp_Umax(n = n, theta1 = theta1, theta2 = theta2))
+
+## print some of the 5000 means
+## each number represents the sample mean from __one__ sample.
+Umaxs_df <- tibble(Umaxs)
+Umaxs_df
+
+ggplot(data = Umaxs_df, aes(x = Umaxs)) +
+  geom_histogram(colour = "deeppink4", fill = "deeppink1", bins = 20) +
+  theme_minimal() +
+  labs(x = "Observed Sample Maxes",
+       title = paste("Uniform Sampling Distribution of the \nSample Max when n =", n))
+
+Nmaxs_df |>
+  summarise(mean_samp_dist_Umax = mean(Umaxs),
+            var_samp_dist_Umax = var(Umaxs),
+            sd_samp_dist_Umax = sd(Umaxs))
+```
+
+Histogram for Y_min for Exp(0.5)
+
+```{r}
+## Code from class
+
+lambdaE <- 0.5
+n <- 5
+
+generate_samp_Emin <- function(n, lambdaE) {
+  
+  single_sample_Emin <- rexp(n, lambdaE)
+  sample_Emin <- min(single_sample_Emin)
+  
+  return(sample_Emin)
+}
+
+## test function once:
+generate_samp_Emin(n = n, lambdaE = lambdaE)
+
+nsim <- 5000      # number of simulations
+
+## code to map through the function. 
+## the \(i) syntax says to just repeat the generate_samp_mean function
+## nsim times
+Emins <- map_dbl(1:nsim, \(i) generate_samp_Emin(n = n, lambdaE = lambdaE))
+
+## print some of the 5000 means
+## each number represents the sample mean from __one__ sample.
+Emins_df <- tibble(Emins)
+Emins_df
+
+ggplot(data = Emins_df, aes(x = Emins)) +
+  geom_histogram(colour = "deeppink4", fill = "deeppink1", bins = 20) +
+  theme_minimal() +
+  labs(x = "Observed Sample Mins",
+       title = paste("Exponential Sampling Distribution of the \nSample Min when n =", n))
+
+Emins_df |>
+  summarise(mean_samp_dist_Emin = mean(Emins),
+            var_samp_dist_Emin = var(Emins),
+            sd_samp_dist_Emin = sd(Emins))
+```
+
+Histogram for Y_max for Exp(0.5)
+
+```{r}
+## Code from class
+
+lambdaE <- 0.5
+n <- 5
+
+generate_samp_Emax <- function(n, lambdaE) {
+  
+  single_sample_Emax <- rexp(n, lambdaE)
+  sample_Emax <- max(single_sample_Emax)
+  
+  return(sample_Emax)
+}
+
+## test function once:
+generate_samp_Emax(n = n, lambdaE = lambdaE)
+
+nsim <- 5000      # number of simulations
+
+## code to map through the function. 
+## the \(i) syntax says to just repeat the generate_samp_mean function
+## nsim times
+Emaxs <- map_dbl(1:nsim, \(i) generate_samp_Emax(n = n, lambdaE = lambdaE))
+
+## print some of the 5000 means
+## each number represents the sample mean from __one__ sample.
+Emaxs_df <- tibble(Emaxs)
+Emaxs_df
+
+ggplot(data = Emaxs_df, aes(x = Emaxs)) +
+  geom_histogram(colour = "deeppink4", fill = "deeppink1", bins = 20) +
+  theme_minimal() +
+  labs(x = "Observed Sample Maxes",
+       title = paste("Exponential Sampling Distribution of the \nSample Max when n =", n))
+
+Emaxs_df |>
+  summarise(mean_samp_dist_Emax = mean(Emaxs),
+            var_samp_dist_Emax = var(Emaxs),
+            sd_samp_dist_Emax = sd(Emaxs))
+```
+
+Histogram for Y_min for Beta(8, 2)
+
+```{r}
+## Code from class
+
+alpha <- 8
+beta <- 2
+n <- 5
+
+generate_samp_Bmin <- function(n, alpha, beta) {
+  
+  single_sample_Bmin <- rbeta(n, alpha, beta)
+  sample_Bmin <- min(single_sample_Bmin)
+  
+  return(sample_Bmin)
+}
+
+## test function once:
+generate_samp_Bmin(n = n, alpha = alpha, beta = beta)
+
+nsim <- 5000      # number of simulations
+
+## code to map through the function. 
+## the \(i) syntax says to just repeat the generate_samp_mean function
+## nsim times
+Bmins <- map_dbl(1:nsim, \(i) generate_samp_Bmin(n = n, alpha = alpha, beta = beta))
+
+## print some of the 5000 means
+## each number represents the sample mean from __one__ sample.
+Bmins_df <- tibble(Bmins)
+Bmins_df
+
+ggplot(data = Bmins_df, aes(x = Bmins)) +
+  geom_histogram(colour = "deeppink4", fill = "deeppink1", bins = 20) +
+  theme_minimal() +
+  labs(x = "Observed Sample Mins",
+       title = paste("Beta Sampling Distribution of the \nSample Min when n =", n))
+
+Bmins_df |>
+  summarise(mean_samp_dist_Bmin = mean(Bmins),
+            var_samp_dist_Bmin = var(Bmins),
+            sd_samp_dist_Bmin = sd(Bmins))
+```
+
+Histogram for Y_max for Beta(8, 2)
+
+```{r}
+## Code from class
+
+alpha <- 8
+beta <- 2
+n <- 5
+
+generate_samp_Bmax <- function(n, alpha, beta) {
+  
+  single_sample_Bmax <- rbeta(n, alpha, beta)
+  sample_Bmax <- max(single_sample_Bmax)
+  
+  return(sample_Bmax)
+}
+
+## test function once:
+generate_samp_Bmax(n = n, alpha = alpha, beta = beta)
+
+nsim <- 5000      # number of simulations
+
+## code to map through the function. 
+## the \(i) syntax says to just repeat the generate_samp_mean function
+## nsim times
+Bmaxs <- map_dbl(1:nsim, \(i) generate_samp_Bmax(n = n, alpha = alpha, beta = beta))
+
+## print some of the 5000 means
+## each number represents the sample mean from __one__ sample.
+Bmaxs_df <- tibble(Bmaxs)
+Bmaxs_df
+
+ggplot(data = Bmaxs_df, aes(x = Bmaxs)) +
+  geom_histogram(colour = "deeppink4", fill = "deeppink1", bins = 20) +
+  theme_minimal() +
+  labs(x = "Observed Sample Maxes",
+       title = paste("Beta Sampling Distribution of the \nSample Max when n =", n))
+
+Bmaxs_df |>
+  summarise(mean_samp_dist_Bmax = mean(Bmaxs),
+            var_samp_dist_Bmax = var(Bmaxs),
+            sd_samp_dist_Bmax = sd(Bmaxs))
+```
+
+|   | $\text{N}(\mu = 10, \sigma^2 = 4)$ | $\text{Unif}(\theta_1 = 7, \theta_2 = 13)$ | $\text{Exp}(\lambda = 0.5)$ | $\text{Beta}(\alpha = 8, \beta = 2)$ |
+|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+| $\text{E}(Y_{min})$ | 7.94 | 8.00 | 0.391 | 0.650 |
+| $\text{E}(Y_{max})$ | 12.0 | 12.0 | 4.59 | 0.922 |
+|  |  |  |  |  |
+| $\text{SE}(Y_{min})$ | 1.41 | 0.852 | 0.386 | 0.104 |
+| $\text{SE}(Y_{max})$ | 1.93 | 0.872 | 2.40 | 0.0461 |
+
+: Table of Results {.striped .hover}
+
+Analysis of SE(Y_min) and SE(Y_max)
+
+For the normal distribution the SE(Y_min) was 1.41 and the SE(Y_max) was 1.93. What is notable about this is that the two SE are relatively the same. Which makes sense because a normal distribution is generally symmetrical so our sampling distributions of Y_min and Y_max should have a relatively similar SE.
+
+For the uniform distribution we see a similar result to the normal distribution. SE(Y_min) was 0.852 and SE(Y_max) was 0.857. This is expected since a uniform distribution is perfectly symmetrical and "uniform" throughout the entire distribution.
+
+For the exponential distribution, we get our first big change from the normal and uniform results. For the exponential distribution we get an SE(Y_min) of 0.386 and an SE(Y_max) of 2.40. This makes sense since in an exponential distribution we get an extremely high amount of density around the lower end meaning our minimum doesn't vary much. But, as you you continue towards infinity, we get little density and much more variance between maximums.
+
+With the beta distribution we see almost a mix of results from the normal and exponential. We see anb SE(Y_min) of 0.104 and an SE(Y_max) of 0.0461. So the the SE(Y_min) and SE(Y_max) do appear to be relatively different, but not as much as the exponential. Which makes sense if we look at the beta distribution, we see a normal looking distribution with a left skew, which indicates more variance of the Y_min.
+
+A general rule for SE(Y_min) and SE(Y_max) could be: If the distribution is symmetrical, the SE(Y_min) and SE(Y_max) should be relatively identical wheras a skewed distribution should have very different SE(Y_min) and SE(Y_max).
+
+Question 2: PDF of Y_min and Y_max of Exponential distribution:
+
+PDF of Exp(0.5) = 0.5 \* exp(-0.5 \* x) from 0 to infinity CDF of Exp(0.5) = 1 - exp(-0.5 \* x) from 0 to infinity
+
+```{r}
+n = 5
+x = seq(0, 5, length.out = 1000)
+
+## Y_min and Y_max densities using PDF and CDF above
+density_min = n * ((-1 * exp(-0.5 * x))^4) * (0.5 * exp(-0.5 * x))
+density_max = n * ((1 - exp(-0.5 * x))^4) * (0.5 * exp(-0.5 * x))
+
+## Plotting the density of Y_min
+EXPmin_df = tibble(x, density_min)
+ggplot(data = EXPmin_df, aes(x = x, y = density_min)) +
+  geom_line() +
+  theme_minimal()
+
+## Plotting the density of Y_max
+EXPmax_df = tibble(x, density_max)
+ggplot(data = EXPmax_df, aes(x = x, y = density_max)) +
+  geom_line() +
+  theme_minimal()
+
+## Integrating to find E(Y_min) and E(Y_max)
+## Starting by making functions of the integrand
+intY_min = function(y) {
+  y * 5 * ((-1 * exp(-0.5 * y))^4) * (0.5 * exp(-0.5 * y))
+}
+
+intY_max = function(y) {
+  y * 5 * ((1 - exp(-0.5 * y))^4) * (0.5 * exp(-0.5 * y))
+}
+
+## finding E(Y_min) and E(Y_max) via integrate() function
+
+(EY_min = integrate(intY_min, 0, Inf))
+(EY_max = integrate(intY_max, 0, Inf))
+```
+
+The theoretical E(Y_min) is 0.4 and the theoretical E(Y_max) is 4.567. Our simulated model had E(Y_min) at 0.391 and E(Y_max) at 4.59. We see that the teoretical answers and the simulated answers for E(Y_min) and E(Y_max) are extremely close!

@@ -1,0 +1,38 @@
+---
+title: "About"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com
+    - icon: github
+      text: Github
+      href: https://github.com
+---
+
+This blog contains five "mini-projects" that were completed over the course of a semester taking STAT-326: Mathematical Statistics. Over the course of the semester, the mini-projects looked into sampling distributions, estimation, confidence intervals, Bayesian Statistics, and the use of p-values. Below are some brief summaries/reflections on each of the five summaries that provide context into each post in the blog.
+
+Mini Project 1: Sampling Distribution of the Sample Minimum and Sample Maximum:
+
+In this project, we looked into sample statistics and how the Central Limit Theorem and different probability distributions affect sample statistics such as the sample maximum and the sample minimum, along with standard error of those two statistics. A nice way this project tied in with other projects is that it set us up for simulation in R. Which came in very handy with Project 3's confidence intervals. Furthermore, looking into how different distributions have different "spreads" which ties into "average width" of Project 3. My biggest takeaway from this mini-project is that the Central Limit Theorem does not apply to every sample statistic.
+
+Mini Project 2: "A Meaningful Story"
+
+In this project, the main focus was on the topic of estimators. However, instead of doing a whole coding/simulation style project, a creative short story using topics in our "Estimators" unit was written. This story is *based on a true story* about the time that I drove home through the Adirondacks in a blizzard and a travel ban. Throughout the story there are many *not so subtle* references to estimators, variance, bias, and likelihood among other key words. My biggest takeaway from this project is that it allowed students to really understand estimators in a more "real world" way as opposed to a bunch of numbers on paper and lines of code in R.
+
+Mini Project 3: Simulation to Investigate Confidence Intervals
+
+This project had students look into how different parameters in the confidence interval formula affect coverage rate and average width of a confidence interval. Two main parameters were looked at, $\hat{p}$, and population size, $n$. Through simulation students were able to see the rate at which each confidence interval covered a point estimate and the average width of each confidence interval, and how different $\hat{p}$ and $n$, affect these. This project ties in nicely with both mini project 1 and 4 due to the amount of simulation performed and it tied in quite nicely to mini project 5 which had students look into p-values on a deeper level, especially since in Stat 113 students can use confidence intervals to help determine whether or not to reject the null hypothesis. My Biggest takeaway is that at small $n$ and $\hat{p}$ close to 0.5, the "Large Sample Assumption" does not hold.
+
+Mini Project 4: Bayesian Analysis
+
+In Mini Project 4, students looked into how 3 different priors, 2 informative and 1 uninformative can affect how we predict the number of proportion of points that Rafael Nadal scores given he is serving. This was a great way to look into how Bayesian statistics differ from frequentest statistics. We essentially took everything learnt from the unit and put it into a simulation project. This tied in quite nicely into projects 1 and 3 based off of the shear amount of simulation. However, we also got to see how Bayesian statistics can predict based off of human knowledge and how we can use more *understandable* "Credible Intervals". My biggest takeaway from this project is almost two-fold. I love the way that background knowledge of a certain topic could and should be used when looking into prediction. However, I believe this should be used predominantly by field experts, as "informative" priors by someone who is relatively "uninformed" seem sort of untrustworthy.
+
+Mini Project 5: Advantages and Drawbacks of Using p-values
+
+This project had students read an article titled *Moving to a World Beyond* $p<0.05$. This article looked into how the world of statistics shouldn't be ruled by p-values, and that thoughtful thinking and background knowledge should be used when making statements about statistics. This nicely ties into the class as unit 5 was all about hypothesis testing, and this project allowed students to get some introspect into the drawbacks of what we were learning and not to just take things for whether its p-value is less than 0.05 or not. This really ties into project 3 with confidence intervals as the paper explicitly mentions them as a source of confusion to the general public, and it details how we should talk about them in general. The biggest takeaway from this is that no matter the p-value, no "significance" is still significant, and that non "significant" results should still be published as learning material for future researchers.

@@ -1,0 +1,226 @@
+---
+title: "Mini Project 3: Simulation to Investigate Confidence Intervals"
+author: "Alex Tidd"
+---
+
+“I have followed all rules for collaboration for this project, and I have not used generative AI on this project.” - Alex Tidd
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(mosaic)
+library(ggplot2)
+library(resample)
+```
+
+For the three population sizes we will be using n1 = 5, n2 = 50, and n3 = 5000. For the two population proportions, we will use p1 = 0.45 and p2 = 0.9.
+
+```{r}
+## creating a function using Dr. Higham's code from lab 3.2
+
+generate_samp_prop <- function(n, p) {
+  x <- rbinom(1, n, p) # randomly generate number of successes for the sample
+  
+  ## number of successes divided by sample size
+  phat <- x / n
+  lb <- phat - qt(0.95, n-1) * sqrt(phat * (1 - phat) / n)
+  ub <- phat + qt(0.95, n-1) * sqrt(phat * (1 - phat) / n)
+  
+  prop_df <- tibble(phat, lb, ub)
+  
+  return(prop_df)
+}
+```
+
+Creating 5000 sample proportions and 5000 associated CIs for n = 5000 and p = 0.45 and finding coverage rate and average width.
+
+```{r}
+## Code from Dr. Higham's Lab 3.1
+generate_samp_prop(5000, 0.45)
+
+n_sim <- 5000
+
+prop_ci_df_large_near <- map(1:n_sim, 
+    \(i) generate_samp_prop(5000, 0.45)) |>
+  bind_rows()
+
+## finding coverage rate and avg width using code provided in Dr. Higham's Lab 3.2
+prop_ci_df_large_near <- prop_ci_df_large_near |>
+  mutate(ci_width = ub - lb,
+         ci_cover_ind = if_else(0.45 > lb & 0.45 < ub,
+                                true = 1,
+                                false = 0)) |>
+  summarise(avg_width = mean(ci_width),
+            coverage_rate = mean(ci_cover_ind))
+
+prop_ci_df_large_near
+```
+
+We see that in this case the average width is 0.0231 and the coverage rate is 0.901.
+
+Lets move on to n = 5000 but now p = 0.9
+
+```{r}
+generate_samp_prop(5000, 0.9)
+
+n_sim <- 5000
+
+prop_ci_df_large_far <- map(1:n_sim, 
+    \(i) generate_samp_prop(5000, 0.9)) |>
+  bind_rows()
+
+## finding coverage rate and avg width using code provided in Dr. Higham's Lab 3.2
+prop_ci_df_large_far <- prop_ci_df_large_far |>
+  mutate(ci_width = ub - lb,
+         ci_cover_ind = if_else(0.9 > lb & 0.9 < ub,
+                                true = 1,
+                                false = 0)) |>
+  summarise(avg_width = mean(ci_width),
+            coverage_rate = mean(ci_cover_ind))
+
+prop_ci_df_large_far
+```
+
+In this case we see that avg width is 0.0140 and the coverage rate is 0.896.
+
+Next up is n = 50 and p = 0.45
+
+```{r}
+generate_samp_prop(50, 0.45)
+
+n_sim <- 5000
+
+prop_ci_df_mid_near <- map(1:n_sim, 
+    \(i) generate_samp_prop(50, 0.45)) |>
+  bind_rows()
+
+## finding coverage rate and avg width using code provided in Dr. Higham's Lab 3.2
+prop_ci_df_mid_near <- prop_ci_df_mid_near |>
+  mutate(ci_width = ub - lb,
+         ci_cover_ind = if_else(0.45 > lb & 0.45 < ub,
+                                true = 1,
+                                false = 0)) |>
+  summarise(avg_width = mean(ci_width),
+            coverage_rate = mean(ci_cover_ind))
+
+prop_ci_df_mid_near
+```
+
+In this case we see that the average width is 0.233 and the coverage rate is 0.914
+
+Next up let's take a look at a medium size n again but this time with a p far from 0.5
+
+```{r}
+generate_samp_prop(50, 0.9)
+
+n_sim <- 5000
+
+prop_ci_df_mid_far <- map(1:n_sim, 
+    \(i) generate_samp_prop(50, 0.9)) |>
+  bind_rows()
+
+## finding coverage rate and avg width using code provided in Dr. Higham's Lab 3.2
+prop_ci_df_mid_far <- prop_ci_df_mid_far |>
+  mutate(ci_width = ub - lb,
+         ci_cover_ind = if_else(0.9 > lb & 0.9 < ub,
+                                true = 1,
+                                false = 0)) |>
+  summarise(avg_width = mean(ci_width),
+            coverage_rate = mean(ci_cover_ind))
+
+prop_ci_df_mid_far
+```
+
+For this setting we see and average width of 0.138 and a coverage rate of 0.866
+
+For the last two rounds we are using a very small n of 5. This should be "interesting" to say the least.
+
+n = 5 and p = 0.45
+
+```{r}
+generate_samp_prop(5, 0.45)
+
+n_sim <- 5000
+
+prop_ci_df_small_near <- map(1:n_sim, 
+    \(i) generate_samp_prop(5, 0.45)) |>
+  bind_rows()
+
+## finding coverage rate and avg width using code provided in Dr. Higham's Lab 3.2
+prop_ci_df_small_near <- prop_ci_df_small_near |>
+  mutate(ci_width = ub - lb,
+         ci_cover_ind = if_else(0.45 > lb & 0.45 < ub,
+                                true = 1,
+                                false = 0)) |>
+  summarise(avg_width = mean(ci_width),
+            coverage_rate = mean(ci_cover_ind))
+
+prop_ci_df_small_near
+```
+
+with small n, we are seeing an average width of 0.819 and a coverage rate of 0.935.
+
+Finally, we will use n = 5 and p = 0.9
+
+```{r}
+generate_samp_prop(5, 0.9)
+
+n_sim <- 5000
+
+prop_ci_df_small_far <- map(1:n_sim, 
+    \(i) generate_samp_prop(5, 0.9)) |>
+  bind_rows()
+
+## finding coverage rate and avg width using code provided in Dr. Higham's Lab 3.2
+prop_ci_df_small_far <- prop_ci_df_small_far |>
+  mutate(ci_width = ub - lb,
+         ci_cover_ind = if_else(0.9 > lb & 0.9 < ub,
+                                true = 1,
+                                false = 0)) |>
+  summarise(avg_width = mean(ci_width),
+            coverage_rate = mean(ci_cover_ind))
+
+prop_ci_df_small_far
+```
+
+for this we see an average width of 0.324 and a coverage rate of 0.392. Very peculiar if I do say so myself.
+
+Now lets put these splendid results in a table:
+
+|    $p$     |               | $n = 5$ | $n = 50$ | $n = 5000$ |
+|:----------:|:-------------:|:-------:|:--------:|:----------:|
+| $p = 0.45$ | Coverage Rate |  0.935  |  0.914   |   0.901    |
+| $p = 0.9$  | Coverage Rate |  0.392  |  0.866   |   0.896    |
+|            |               |         |          |            |
+| $p = 0.45$ | Average Width |  0.819  |  0.233   |   0.0231   |
+| $p = 0.9$  | Average Width |  0.324  |  0.138   |   0.0140   |
+
+: Table of Results {.striped .hover}
+
+Now lets take a look into how the large sample assumption holds for each setting. To start we will determine in n is large enough for the "Wald" interval using n \* p_hat \> 10 and n \* (1 - p_hat) \> 10.
+
+| $\hat{p}$ | $n$  | $n\hat{p}$ | $n (1 - \hat{p})$ | $Both > 10$ |
+|:---------:|:----:|:----------:|:-----------------:|:-----------:|
+|  $0.45$   | 5000 |    2250    |       2750        |    True     |
+|   $0.9$   | 5000 |    4500    |        500        |    True     |
+|  $0.45$   |  50  |    22.5    |       27.5        |    True     |
+|   $0.9$   |  50  |     45     |         5         |    False    |
+|  $0.45$   |  5   |    2.25    |       2.75        |    False    |
+|   $0.9$   |  5   |    4.5     |        0.5        |    False    |
+
+: Table of Results {.striped .hover}
+
+So, here we see that in three cases, our assumption of large sample does not hold, which matches our first table of results.
+
+Discussion:
+
+For this simulation of confidence intervals, sample size, n, was varied between 5, 50, and 5000. Furthermore our p_hat, was varied between 0.45 and 0.9. In order to see how the large sample assumption holds for assymptotic confidence intervals of proportion, average width of confidence interval and coverage rate of confidence interval was found.
+
+In order to test this, expected results are as follws: As p_hat approaches 0.5, we should see the largest average width compared with average witdth of same sample size, and as n is increased, we should see a decrease in average width, when p_hat is held constant. This is because our width parameter is defined as: $$\sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}$$ Furthermore, we expect coverage rate to stay the same throughout this simulation as that is solely depended on our confidence level. The only time this should change is when confidence level is adjusted, which in this experiment, it remains at 90%. So in this case coverage rate should be around 0.9.
+
+The results in this experiment followed theory to a tee. When using the "Wald" interval for confidence interval of a proportion, you must make sure the np \> 10 and n(1 - p) \> 10 for our assumptions to hold. In this case, 3 of the 6 intervals tested upheld this stipulation, n = 5000 and p = 0.45, n = 5000 and p = 0.9, and n = 50 and p = 0.45.
+
+In the case of n = 5000, we see that when p = 0.45, the average width was roughly 0.0231 compared to when p = 0.9 at average width roughly 0.0140. This follows what we expect as when n is held constant, p further from 0.5 will have a smaller average width. Furthermore, the average widths of n = 5000 we're also the smallest when p is held constant, like we expect. And for both n = 5000, coverage rate is approximately 0.9.
+
+In the case of n = 50, our assumption only holds when p = 0.45. We see a smaller average width when p = 0.9, as expected. However, coverage rate is only approximately 0.9 when p = 0.45. This is as expected since when n = 50 and p = 0.9, the stipulation of n(1 - p) \> 10 is not upheld. So we see that when n is mid-sized, the large sample assumption is only upheald when p is close to 0.5.
+
+Lastly, small n. When n = 5, we see that neither np \> 10 nor n(1 - p) \> 10 is upheld. The results of this simulation reflect this. The average widths followed our expected pattern, however the widths 0.819 for p = 0.45 and 0.324 for p = 0.9, which are very large widths and don't really tell you anything since proportions can only be between 0 and 1. So a width of 0.8 is basically like saying "we're 90% confident it could be anywhere". And lastly, the coverage rates were approximately 0.93 for p = 0.45 and 0.39 for n = 0.9. Which essientiall means for p = 0.9 we wanted a 90% confidence interval and only came away with a 40% confidence interval. And comparing that to an average with of 0.324 being only a 40% confidence level, a 90% confidence interval would have very large bounds, running into the same issue as n = 5 and p = 0.45, where the confidence interval really only tells you that it is somewhere.
